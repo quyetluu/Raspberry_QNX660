@@ -1,0 +1,153 @@
+=====================================================================
+             BSP Release Notes
+=====================================================================  
+This is a release note for QNX6.6.0 BSP for R-Car W2H Tethys board
+
+This BSP is distributed under QNX Apache License, version 2.0.
+
+                         Board:  RENESAS R-Car W2H Tethys board
+                      BSP file:  R-CarW2H_Tethys_qnx66_bsp_yyyy_mm_dd.zip
+                       Version:  0.2.4
+                  Release Date:  09.15.2016
+                        Author:  Renesas Electronics America Inc.
+ Software Development Platform:  QNX SDP 6.6.0
+===================================================================== 
+
+---------------------------------------------------------------------
+ Installation 
+---------------------------------------------------------------------
+Please refer to the BSP Setup Manual for specific instructions on 
+using this BSP with the specified target device.      
+
+---------------------------------------------------------------------
+ Uninstallation  
+---------------------------------------------------------------------
+In order to uninstall the BSP, please just do a simple thing is delete 
+R-CarW2H_Tethys_qnx66_bsp_yyyy_mm_dd.zip file and extracted 
+R-CarW2H_Tethys_qnx66_bsp_yyyy_mm_dd folder from your system. 
+
+If using QNX IDE, delete the project by doing mouse right click on BSP
+project and selecting 'delete' option. 
+when prompted select "Delete project contents on disk".
+
+---------------------------------------------------------------------
+ QNX6.6 BSP Change History
+---------------------------------------------------------------------
+    CREATED   : 03.04.2016
+    MODIFIED  : 09.12.2016 
+    BSP CONTENTS  :
+    <R-CarW2H_Tethys_qnx66_bsp_yyyy_mm_dd>
+    +-- <images>        : where the resultant boot images are places
+    +-- <install>       : gets populated at the beginning of the BSP build process
+    +-- <prebuilt>      : contains the binaries, system binaries, 
+                          buidfiles, libraries, and header files that 
+                          are shipped with the BSP
+    |   +-- <usr>       : 
+    |   |   +-- <include>   : stores header files that are shipped with the BSP
+    +-- <src>               : stored the whole source files of BSP
+    |   +-- <hardware>      : BSP source files
+    |   |   +-- <can>       : store CAN driver source files
+    |   |   +-- <deva>      : store Audio (SSI, SCU) driver source files
+    |   |   +-- <devb>      : store SD/eMMC driver source files
+    |   |   +-- <devc>      : stores SCIF and HSCIF driver source files
+    |   |   +-- <devnp>     : stores Network driver source files
+    |   |   +-- <flash>     : stores SPI Flash driver source files
+    |   |   +-- <gpio>      : stores GPIO driver source files
+    |   |   +-- <i2c>       : stores I2C driver source files
+    |   |   +-- <ipl>       : stores IPL source files
+    |   |   +-- <startup>   : stores Startup source files
+    |   |   +-- <support>   : utility programs
+    |   |   |   +-- <resource_seed>   : stores resource_seed source files
+    |   |   |   +-- <sdio>            : stores SDIO library source files
+    |   |   |   +-- <wdtkick-rcar>    : stores Watchdog timer source files
+    |   |   +-- Makefile        : compiling makefile
+    |   +-- <lib>               : drivers libraries and includes   
+    |   |   +-- <dma>           : stores SYS-DMAC, Audio-DMAC and PP-DMAC libraries source file
+    |   +-- <utils>             : test programs
+    |   |   +-- <gpio_test>     : stores GPIO test source files
+    |   |   +-- <i2c_test>      : stores I2C test source files
+    |   |   +-- <sdio_test>     : stores SDIO test source files
+    |   |   +-- Makefile        : compiling makefile
+    |   +-- Makefile    : compiling makefile   
+    +-- History.txt     : This file
+    +-- Makefile        : compiling make file
+    +-- source.xml      : some information about BSP, CPU name
+
+    HISTORY:
+    03.04.2016 : Ver.0.1.0
+    - Support modules/drivers:
+        Startup 
+        Debug serial driver
+        Can driver
+        Network driver
+        SPI Flash driver
+        I2C driver
+        GPIO driver
+    03.15.2016 : Ver.0.1.1
+    - Support modules/drivers:
+        Audio
+        SD/MMC driver
+        SDIO driver
+        WDT driver
+    04.05.2016 : Ver.0.1.2
+    - Support DMA mode for eMMC driver
+    - Remove/correct invalid register macros in r-car.h
+    04.07.2016 : Ver.0.1.3
+    - Fix write issue to SD card for SD card driver (devb)
+    04.08.2016 : Ver.0.1.4
+    - Apply fix patch for CAN driver:
+       Correct Bitrate calculator
+       Correct the way to change CAN Message ID in Standard MID mode
+       Fix CAN function interfaces to get/set MID
+    04.11.2016 : Ver.0.1.5
+    - Fix FPC for EtherMAC in init_board.c in startup
+    - Add IPL module
+    04.25.2016 : Ver.0.1.6
+    - Add sdio reset function to sdio host/sdio libraries
+    04.29.2016 : Ver.0.1.6
+	I2C-A driver:
+	- Decreased glitch filter clock frequency
+	- Revised code for releasing i2c bus
+    05.10.2016 : Ver.0.1.6
+	Startup:
+	- Removed arm_list[] out of platform specific folder
+    05.12.2016 : Ver.0.1.6
+	- Added OpenSSL, tcpdump, date, ssh, sshd, date, tar, gzip
+    05.13.2016 : Ver.0.1.6
+	- Re-Organized build file. 
+    05.19.2016 : Ver.0.1.7
+	- Added profile in /prebuilt/etc/
+    05.20.2016 : Ver.0.1.7
+	- Added ntp binaries v4.2.8p6
+    05.27.2016 : Ver.0.1.8
+	- Supported USB function driver
+    06.08.2016 : Ver.0.1.9
+	- Support DMA with transfer size = 4 for SPI Flash driver
+    06.15.2016 : Ver.0.1.9
+	- Added PCIe driver
+	- Added script to start ntpd at the beginning 
+	- USB function: Fixed stability issue when attach/detach device
+    06.21.2016 : Ver.0.2.0
+    - Updated SDIO library to fix issues related to CMD53, CMD52 and improve performance    
+    07.22.2016 : Ver.0.2.1
+    - CAN driver: fix hang issue when message buffer is full
+    - Add dd to build file
+    08.17.2016 : Ver.0.2.2
+    - CAN driver: Disable one time transaction mode
+    - Fix wrong Audio-DMAC base address setting in sysdmac library
+    - Fix wrong signal voltage PFC setting in devb driver
+    08.18.2016 : Ver.0.2.3
+    - Support automount qnx4 for eMMC
+    - USB function: fix console hang issue when trying to access mounted USB stick
+      after switching from host to function
+    08.29.2016 : Ver.0.2.3
+    - Reserve 32MB for QNX/ITRON OS shared memory
+    09.09.2016 : Ver.0.2.4
+    - Support 16 bit bus Single DDR (512MB)
+    09.12.2016 : Ver.0.2.4
+    - Update eMMC driver for HS200 mode
+
+---------------------------------------------------------------------
+ Known limitations with this release
+---------------------------------------------------------------------
+    None

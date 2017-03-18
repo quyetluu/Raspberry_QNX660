@@ -1,0 +1,290 @@
+###########################################################################
+##
+## QNX Neutrino 6.6 on the R_CarW2H (ARMv7 Cortex-A7 core) Board
+##
+###########################################################################
+##
+## SUPPORTED DEVICES:
+##
+## SERIAL:   SCIF0,SCIF1
+## I2C
+## SPI
+## HSCIF: HSCIF0,HSCIF1
+## MSIOF: MSIOF0
+## THERMAL
+## Watchdog
+## eMMC
+## SDIO 
+###########################################################################
+##
+## NOTES:
+##
+###########################################################################
+
+###########################################################################
+## START OF BUILD SCRIPT
+###########################################################################
+
+[image=0x200000]
+[+compress]
+[virtual=armle-v7,raw] .bootstrap = {
+    # Options specific to this BSP:
+    #
+
+	startup-bcm2836 -P1 -W -vvvvv
+	#######################################################################
+	## PATH set here is the *safe* path for executables.
+	## LD_LIBRARY_PATH set here is the *safe* path for libraries.
+	##     i.e. These are the paths searched by setuid/setgid binaries.
+	##          (confstr(_CS_PATH...) and confstr(_CS_LIBPATH...))
+	#######################################################################
+	PATH=/proc/boot:/bin:/usr/bin:/usr/photon/bin:/opt/bin:/sbin:/usr/sbin:/usr/lib:/tmp:/etc
+	LD_LIBRARY_PATH=/proc/boot:/lib:/usr/lib:/lib/dll:/opt/lib:/usr/photon/lib:/usr/lib:/tmp:/etc procnto-smp -v
+}
+
+[+script] .script = {
+	# Initialise the console
+	procmgr_symlink ../../proc/boot/libc.so.3 /usr/lib/ldqnx.so.2
+	display_msg Welcome to QNX Neutrino 6.6 on the PI2 (ARM Cortex-A7 core) Board
+	
+    
+	
+	[+session] ksh &
+}
+
+# Redirect console messages
+[type=link] /bin/sh=/proc/boot/ksh
+[type=link] /dev/console=/dev/ser1
+[type=link] /tmp=/dev/shmem
+[type=link] /dev/gps0=/dev/ser2
+
+
+#Shared libraries
+libsocket.so
+libc.so
+libssl.so
+libcrypto.so
+libz.so
+libm.so
+libmq.so
+libcpp.so.5
+libcpp-ne.so.5
+libnbutil.so
+librpc.so
+libtracelog.so
+
+## Block device
+libcam.so
+io-blk.so
+cam-disk.so
+fs-qnx6.so
+fs-qnx4.so
+fs-dos.so
+cam-disk.so
+
+###########################################################################
+## AUDIO driver and libraries
+###########################################################################
+deva-ctrl-rcar-ssi.so
+libpps.so
+libaudio_manager.so
+libcsm.so
+/lib/libasound.so=libasound.so
+/usr/lib/libaoi.so=libaoi.so
+/lib/dll/deva-util-restore.so=deva-util-restore.so
+
+###########################################################################
+## Network driver
+###########################################################################
+devnp-felic.so
+devnp-usbdnet.so
+
+###########################################################################
+## USB drivers & libraries
+###########################################################################
+libusbdi.so
+libusbdi.so.2
+devu-ohci.so
+devu-ehci.so
+
+###########################################################################
+## USB function drivers and libraries
+###########################################################################
+/lib/libusbdci.so=libusbdci.so
+/lib/libusbdci.so.2=libusbdci.so.2
+devu-usbumass-hsusb-otg.so
+devu-usbser-hsusb-otg.so
+devu-usbncm-hsusb-otg.so
+
+# Executables
+[data=c]
+[perms=+r,+x]
+###########################################################################
+## Serial driver
+###########################################################################
+devc-serscif
+
+###########################################################################
+## USB utilities
+###########################################################################
+io-usb
+usb
+devb-umass
+devu-mouse
+devu-kbd
+
+###########################################################################
+## USB function driver
+###########################################################################
+/sbin/usb_otg_sw=usb_otg_sw
+/sbin/io-usb-dcd=io-usb-dcd
+/sbin/devu-umass_client-block=devu-umass_client-block
+/sbin/ulink_ctrl=ulink_ctrl
+
+
+
+
+###########################################################################
+## AUDIO utilities
+###########################################################################
+io-audio
+wave
+waverec
+mix_ctl
+
+
+###########################################################################
+## Network utils
+###########################################################################
+io-pkt-v4
+io-pkt-v6-hc
+dhcp.client
+nicinfo
+tftp
+ftp
+devc-pty
+telnet
+tftpd
+ftpd
+ifconfig
+ping
+ping6
+sysctl
+rshd
+fs-cifs
+fs-nfs2
+fs-nfs3
+ntpd
+ntpq
+ntpdate
+tcpdump
+
+
+
+############################################################################
+### General commands
+############################################################################
+ksh
+hogs
+ls
+pipe
+pidin
+slogger
+syslogd
+slogger2
+sloginfo
+cp
+rm
+slay
+mv
+grep
+more
+mount
+uname
+umount
+waitfor
+shutdown
+sleep
+getconf
+setconf
+dumper
+chmod
+fdisk
+mkdosfs
+devb-ram
+cat
+vi
+use
+mkdir
+out32
+in32
+random
+date
+tar
+gzip
+gunzip
+zcat
+mq
+ln
+top
+route
+dinit
+sync
+dd
+
+##########################################################################
+## Momentics IDE remote target debug binaries
+###########################################################################
+/usr/sbin/qconn=qconn
+/usr/bin/pdebug=pdebug
+/usr/sbin/tracelogger=tracelogger
+
+############################################################################
+### Network services
+############################################################################
+/usr/sbin/inetd=inetd
+/usr/sbin/telnetd=telnetd
+/bin/login=login
+/usr/bin/passwd=passwd
+/usr/bin/ssh=ssh
+/usr/bin/scp=scp
+/usr/sbin/sshd=sshd
+ssh-keygen
+/usr/libexec/sftp-server=${QNX_TARGET}/${PROCESSOR}/usr/libexec/sftp-server
+
+[type=link] /var/log=/tmp
+[type=link] /var/run=/tmp
+[type=link] /var/lock=/tmp
+
+/etc/inetd.conf = {
+telnet stream tcp nowait root /usr/sbin/telnetd in.telnetd
+ftp stream tcp nowait root /usr/sbin/ftpd in.ftpd -l
+shell stream tcp nowait root /bin/rshd in.rshd
+login stream tcp nowait root /bin/rlogind in.rlogind
+tftp dgram udp wait ftp /bin/tftpd in.tftpd
+}
+/etc/resolv.conf = {
+nameserver 8.8.8.8
+}
+
+/usr/bin/logout=logout
+/usr/bin/which=which
+/usr/bin/ps=ps
+/usr/bin/nice=nice
+/usr/bin/find=find
+/usr/bin/touch=touch
+/etc/autoconnect=${QNX_TARGET}/etc/autoconnect
+/etc/ftpusers=${QNX_TARGET}/etc/ftpusers
+/etc/group=${QNX_TARGET}/etc/group
+/etc/hosts=${QNX_TARGET}/etc/hosts
+/etc/passwd=${QNX_TARGET}/etc/passwd
+/etc/motd=${QNX_TARGET}/etc/motd
+/etc/netconfig=${QNX_TARGET}/etc/netconfig
+/etc/networks=${QNX_TARGET}/etc/networks
+/etc/protocols=${QNX_TARGET}/etc/protocols
+/etc/qversion=${QNX_TARGET}/etc/qversion
+/etc/rpc=${QNX_TARGET}/etc/rpc
+/etc/services=${QNX_TARGET}/etc/services
+/etc/termcap=${QNX_TARGET}/etc/termcap
+/usr/lib/terminfo=${QNX_TARGET}/usr/lib/terminfo
+/etc/profile=../prebuilt/etc/profile
